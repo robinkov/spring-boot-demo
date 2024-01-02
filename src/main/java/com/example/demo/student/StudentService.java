@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,4 +60,44 @@ public class StudentService {
             student.setEmail(email);
         }
     }
+
+    public List<Student> getStudentById(Long id) {
+        Student student = studentRepository
+                .findById(id)
+                .orElseThrow(() -> new IllegalStateException("student with " + id + " does not exist"));
+        return List.of(student);
+    }
+
+    public List<Student> getStudentsByNameStartingWith(String prefix) {
+        return studentRepository
+                .findByNameStartingWith(prefix)
+                .orElseThrow(() -> new IllegalStateException(
+                        "students with names starting with " + prefix + " do not exist"
+                ));
+    }
+
+    public List<Student> getStudentsByEmailStartingWith(String prefix) {
+        return studentRepository
+                .findByEmailStartingWith(prefix)
+                .orElseThrow(() -> new IllegalStateException(
+                        "students with emails starting with " + prefix + " do not exist"
+                ));
+    }
+
+    public List<Student> getStudentsByDobAfter(LocalDate dobAfter) {
+        return studentRepository
+                .findByBirthDateAfter(dobAfter)
+                .orElseThrow(() -> new IllegalStateException(
+                        "students with date of birth after " + dobAfter + " do not exist"
+                ));
+    }
+
+    public List<Student> getStudentsByDobBefore(LocalDate dobBefore) {
+        return studentRepository
+                .findByBirthDateBefore(dobBefore)
+                .orElseThrow(() -> new IllegalStateException(
+                        "students with date of birth before " + dobBefore + " do not exist"
+                ));
+    }
+
 }
